@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<script>
+  document.documentElement.dataset.theme =
+    localStorage.getItem('theme') ||
+    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>이선호 | iOS Developer Portfolio</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #141419;
+    --surface-hover: #1a1a22;
+    --surface-elevated: #1e1e28;
+    --text: #e4e4e7;
+    --text-primary: #fafafa;
+    --text-secondary: #a1a1aa;
+    --text-tertiary: #71717a;
+    --accent: #7fc8bb;
+    --accent-muted: rgba(127, 200, 187, 0.09);
+    --accent-sub: #8badc4;
+    --border: #27272a;
+    --border-light: #1e1e24;
+    --tag-problem-bg: rgba(248, 113, 113, 0.1);
+    --tag-problem-text: #e0a3a3;
+    --tag-solution-bg: rgba(127, 200, 187, 0.1);
+    --tag-solution-text: #7fc8bb;
+    --tag-result-bg: rgba(212, 178, 116, 0.1);
+    --tag-result-text: #d4b274;
+    --tag-episode-bg: rgba(113, 113, 122, 0.15);
+    --tag-episode-text: #a1a1aa;
+    --nav-bg: rgba(10, 10, 15, 0.78);
+    --on-accent: #0a0a0f;
+    --radius: 16px;
+    --radius-sm: 10px;
+    --radius-tag: 6px;
+    --max-w: 780px;
+    --padding-x: 24px;
+    --space-section: 80px;
+    --space-card: 24px;
+    --space-inner: 32px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+
+  body {
+    font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    overflow-x: hidden;
+    font-size: 15px;
+    word-break: keep-all;          /* 한국어: 단어 중간 줄바꿈 방지 */
+    overflow-wrap: break-word;     /* 긴 영문/코드는 넘칠 때만 자름 */
+  }
+
+  p, li, .ts-text, .section-desc, .chart-caption { text-wrap: pretty; } /* 외톨이 단어(고아) 방지 */
+  h1, h2, h3, .section-title { text-wrap: balance; }                    /* 제목 두 줄일 때 균형 배분 */
+
+  code, .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: var(--nav-bg);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid var(--border-light);
+    height: 48px;
+    display: flex; align-items: center; justify-content: center;
+    gap: 2rem;
+  }
+  nav a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: color 0.2s;
+    letter-spacing: -0.2px;
+  }
+  nav a:hover { color: var(--accent); }
+
+  /* LAYOUT */
+  .container { max-width: var(--max-w); margin: 0 auto; padding: 0 var(--padding-x); }
+  section { padding: var(--space-section) 0; }
+
+  .section-label {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .section-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -1px;
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+  .section-desc {
+    color: var(--text-secondary);
+    font-size: 15px;
+    margin-bottom: 40px;
+    line-height: 1.75;
+  }
+
+  /* HERO */
+  .hero { padding: 120px 0 48px; }
+  .hero h1 {
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -2px;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .hero-name {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    letter-spacing: -0.5px;
+  }
+  .hero-desc {
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 32px;
+    max-width: 520px;
+  }
+  .contact-bar { display: flex; flex-wrap: wrap; gap: 8px; }
+  .contact-bar a {
+    display: inline-flex; align-items: center;
+    padding: 8px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  .contact-bar a:hover { border-color: var(--text-tertiary); }
+  .contact-bar a.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+    font-weight: 600;
+  }
+  .contact-bar a.primary:hover { opacity: 0.85; }
+
+  /* ABOUT */
+  .about-table { width: 100%; border-top: 1px solid var(--border); }
+  .about-row {
+    display: flex;
+    border-bottom: 1px solid var(--border-light);
+    padding: 16px 0;
+    gap: 24px;
+  }
+  .about-label {
+    flex-shrink: 0;
+    width: 110px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    padding-top: 2px;
+  }
+  .about-content { flex: 1; }
+  .about-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+    gap: 16px;
+  }
+  .about-item:last-child { margin-bottom: 0; }
+  .about-item-name {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  .about-item-date {
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-tertiary);
+    font-weight: 400;
+    white-space: nowrap;
+  }
+
+  /* PROJECT CARD */
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: var(--space-inner);
+    margin-bottom: var(--space-card);
+    transition: border-color 0.2s;
+  }
+  .project-card:hover { border-color: rgba(94, 234, 212, 0.2); }
+  .project-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    gap: 12px;
+  }
+  .project-card h3 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+    line-height: 1.3;
+  }
+  .project-period {
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-tertiary);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .project-meta {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .project-logo { height: 40px; margin-bottom: 12px; }
+
+  /* APP GALLERY */
+  .app-gallery {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin-bottom: 24px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .app-gallery::-webkit-scrollbar { display: none; }
+  .phone-frame {
+    flex-shrink: 0;
+    height: 280px;
+    border-radius: 16px;
+    border: 2px solid #333;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    overflow: hidden;
+    background: #000;
+  }
+  .phone-frame img { height: 100%; width: auto; display: block; }
+
+  /* CHART FIGURE (단독 이미지 + 캡션) */
+  .chart-figure {
+    margin: 4px 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+  .chart-frame {
+    height: auto;
+    width: 100%;
+    max-width: 320px;
+    background: var(--surface-elevated);
+  }
+  .chart-frame img { height: auto; width: 100%; }
+  .chart-frame-tall { max-width: 300px; }
+  .chart-caption {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    max-width: 560px;
+    text-align: center;
+    letter-spacing: -0.2px;
+  }
+  .chart-caption strong { color: var(--text-primary); font-weight: 600; }
+  .chart-caption code {
+    background: var(--surface-elevated);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 11px;
+    color: var(--accent);
+  }
+
+  /* BULLET LIST */
+  .bullet-list { list-style: none; margin-bottom: 24px; }
+  .bullet-list li {
+    position: relative;
+    padding-left: 16px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.75;
+  }
+  .bullet-list li:last-child { margin-bottom: 0; }
+  .bullet-list li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 10px;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .bullet-list li strong { color: var(--text-primary); font-weight: 600; }
+
+  /* TECH TAGS */
+  .tech-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tech-tag {
+    padding: 4px 12px;
+    background: var(--surface-elevated);
+    color: var(--text-secondary);
+    border-radius: var(--radius-tag);
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  /* TROUBLESHOOTING CARD */
+  .ts-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: var(--space-inner);
+    margin-bottom: var(--space-card);
+    transition: border-color 0.2s;
+  }
+  .ts-card:hover { border-color: rgba(94, 234, 212, 0.2); }
+
+  /* 아코디언: 접힌 상태 = 번호 + 제목 + 임팩트만 */
+  details.ts-card > summary {
+    list-style: none;
+    cursor: pointer;
+    position: relative;
+    padding-right: 36px;
+    outline: none;
+  }
+  details.ts-card > summary::-webkit-details-marker { display: none; }
+  details.ts-card > summary::after {
+    content: '+';
+    position: absolute;
+    right: 2px;
+    top: 0;
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--text-tertiary);
+    transition: color 0.2s;
+  }
+  details.ts-card[open] > summary::after { content: '\2212'; color: var(--accent); }
+  details.ts-card > summary:hover::after { color: var(--accent); }
+  details.ts-card:not([open]) > summary h3 { margin-bottom: 10px; }
+  details.ts-card:not([open]) > summary .ts-impact { margin-bottom: 0; }
+  .ts-body { padding-top: 8px; }
+
+  .ts-controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 12px;
+  }
+  .ts-controls button {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-family: inherit;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .ts-controls button:hover { color: var(--accent); border-color: var(--accent); }
+
+  @media print {
+    details.ts-card > summary::after { display: none; }
+    .ts-controls { display: none; }
+    .ts-card { break-inside: avoid; }
+  }
+
+  .ts-number {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-tertiary);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .ts-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+    line-height: 1.4;
+    margin-bottom: 20px;
+  }
+  .ts-tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    margin-bottom: 8px;
+  }
+  .ts-tag-problem { background: var(--tag-problem-bg); color: var(--tag-problem-text); }
+  .ts-tag-solution { background: var(--tag-solution-bg); color: var(--tag-solution-text); }
+  .ts-tag-result { background: var(--tag-result-bg); color: var(--tag-result-text); }
+  .ts-tag-episode { background: var(--tag-episode-bg); color: var(--tag-episode-text); }
+
+  .ts-text {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+  .ts-text:last-child { margin-bottom: 0; }
+  .ts-text code {
+    background: var(--surface-elevated);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--accent);
+  }
+
+  .ts-impact {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    padding: 8px 14px;
+    background: var(--accent-muted);
+    border-radius: var(--radius-tag);
+    margin-bottom: 20px;
+    line-height: 1.6;
+    letter-spacing: -0.2px;
+  }
+
+  /* FLOW DIAGRAM (수제 SVG 흐름도) */
+  .flow-diagram {
+    background: var(--surface-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 22px 20px;
+    margin-bottom: 20px;
+  }
+  .flow-diagram svg { width: 100%; height: auto; display: block; }
+  .flow-diagram .fd-box { fill: var(--surface); stroke: var(--border); }
+  .flow-diagram .fd-box-accent { fill: var(--accent-muted); stroke: var(--accent); }
+  .flow-diagram .fd-title { fill: var(--text-primary); font-weight: 700; }
+  .flow-diagram .fd-sub { fill: var(--text-tertiary); }
+  .flow-diagram .fd-code { fill: var(--accent); font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+  .flow-diagram .fd-line { stroke: var(--text-tertiary); fill: none; }
+  .flow-diagram .fd-line-loop { stroke: var(--accent); fill: none; }
+  .flow-diagram .fd-arrow { fill: var(--text-tertiary); }
+  .flow-diagram .fd-arrow-loop { fill: var(--accent); }
+  .flow-diagram .fd-edge-label { fill: var(--text-secondary); font-weight: 600; }
+  .flow-diagram .fd-loop-label { fill: var(--accent); font-weight: 700; }
+  .flow-diagram-caption {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    text-align: center;
+    margin: -8px 0 20px;
+    line-height: 1.6;
+  }
+  .flow-diagram-caption code {
+    background: var(--surface-elevated);
+    padding: 1px 5px; border-radius: 4px;
+    font-size: 11px; color: var(--accent);
+  }
+
+  /* HERO METRICS (핵심 지표 배지) */
+  .metrics-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .metric-card {
+    background: var(--surface-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 18px 14px;
+    text-align: center;
+  }
+  .metric-value {
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -1px;
+    line-height: 1.05;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .metric-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-top: 9px;
+    letter-spacing: 0.1px;
+    line-height: 1.5;
+  }
+
+  /* BEFORE / AFTER 2열 비교 */
+  .ba-compare {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .ba-col {
+    border-radius: var(--radius-sm);
+    padding: 16px 18px;
+    border: 1px solid var(--border);
+  }
+  .ba-col-before {
+    background: var(--tag-problem-bg);
+    border-color: var(--tag-problem-bg);
+  }
+  .ba-col-after {
+    background: var(--tag-solution-bg);
+    border-color: var(--tag-solution-bg);
+  }
+  .ba-head {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .ba-col-before .ba-head { color: var(--tag-problem-text); }
+  .ba-col-after .ba-head { color: var(--tag-solution-text); }
+  .ba-list { list-style: none; }
+  .ba-list li {
+    position: relative;
+    padding-left: 16px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+  .ba-list li:last-child { margin-bottom: 0; }
+  .ba-list li::before {
+    content: '';
+    position: absolute;
+    left: 2px; top: 9px;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+  }
+  .ba-col-before .ba-list li::before { background: var(--tag-problem-text); }
+  .ba-col-after .ba-list li::before { background: var(--tag-solution-text); }
+  .ba-list li strong { color: var(--text-primary); font-weight: 600; }
+  .ba-list code {
+    background: var(--surface-elevated);
+    padding: 1px 5px; border-radius: 4px;
+    font-size: 11px; color: var(--accent);
+  }
+
+
+  /* PERFORMANCE TABLE */
+  .perf-table-wrapper { overflow-x: auto; margin-bottom: 20px; }
+  .perf-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .perf-table th {
+    text-align: left;
+    padding: 10px 14px;
+    background: var(--surface-elevated);
+    color: var(--text-tertiary);
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+  .perf-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-light);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+  }
+  .perf-table td:first-child {
+    font-family: 'Pretendard Variable', Pretendard, sans-serif;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+  .perf-table .val-before { color: var(--tag-problem-text); }
+  .perf-table .val-after { color: var(--accent); }
+  .perf-table .val-improve { color: var(--accent); font-weight: 700; }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 40px var(--padding-x);
+    color: var(--text-tertiary);
+    font-size: 13px;
+    border-top: 1px solid var(--border-light);
+  }
+
+  /* ANIMATIONS */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* LIGHT THEME */
+  [data-theme="light"] {
+    --bg: #f8f8fc;
+    --surface: #ffffff;
+    --surface-hover: #f4f4f8;
+    --surface-elevated: #eeeef3;
+    --text: #3f3f46;
+    --text-primary: #09090b;
+    --text-secondary: #52525b;
+    --text-tertiary: #a1a1aa;
+    --accent: #0f766e;
+    --accent-muted: rgba(15, 118, 110, 0.08);
+    --accent-sub: #0369a1;
+    --border: #e4e4e7;
+    --border-light: #f0f0f5;
+    --tag-problem-bg: rgba(220, 38, 38, 0.08);
+    --tag-problem-text: #dc2626;
+    --tag-solution-bg: rgba(13, 148, 136, 0.1);
+    --tag-solution-text: #0d9488;
+    --tag-result-bg: rgba(202, 138, 4, 0.1);
+    --tag-result-text: #92400e;
+    --tag-episode-bg: rgba(113, 113, 122, 0.1);
+    --tag-episode-text: #71717a;
+    --nav-bg: rgba(248, 248, 252, 0.85);
+    --on-accent: #ffffff;
+  }
+
+  /* THEME TOGGLE */
+  .theme-toggle {
+    background: none; border: none; cursor: pointer;
+    color: var(--text-secondary); font-size: 15px;
+    padding: 4px 8px; border-radius: 6px; line-height: 1;
+    transition: color 0.2s, background 0.2s;
+  }
+  .theme-toggle:hover { color: var(--accent); background: var(--accent-muted); }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    :root { --space-section: 56px; --space-inner: 20px; --padding-x: 16px; }
+    .hero h1 { font-size: 32px; letter-spacing: -1px; }
+    .hero-name { font-size: 20px; }
+    .hero { padding: 96px 0 32px; }
+    .section-title { font-size: 26px; }
+    .project-card h3 { font-size: 20px; }
+    .phone-frame { height: 220px; border-radius: 12px; border-width: 2px; }
+    .about-row { flex-direction: column; gap: 4px; }
+    .about-label { width: auto; }
+    .project-header { flex-direction: column; gap: 4px; }
+    nav { gap: 1rem; padding: 0 16px; }
+    nav a { font-size: 12px; }
+    .ts-card h3 { font-size: 16px; }
+    .perf-table { font-size: 12px; }
+    .perf-table th, .perf-table td { padding: 8px 10px; }
+    .ba-compare { grid-template-columns: minmax(0, 1fr); }
+    .metric-value { font-size: 22px; }
+    .metric-label { font-size: 10px; }
+    .metric-card { padding: 12px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#about">About</a>
+  <a href="#cgms">CGMS</a>
+  <a href="#boletto">Boletto</a>
+  <a href="#ai">AI</a>
+  <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" aria-label="테마 전환">☀</button>
+</nav>
+
+<div class="container">
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="fade-in">
+    <h1><span style="color:var(--accent);">사람이 좋아</span><br>iOS 개발자가 되었습니다.</h1>
+    <p class="hero-name">이선호 <span style="color:var(--text-tertiary); font-size:15px; font-weight:500;">iOS Developer</span></p>
+    <p class="hero-desc">
+      팀이 되어 최고의 동료들과 협업하고,<br>
+      사용자가 머무는 서비스를 만들고 싶은 개발자입니다.
+    </p>
+    <div class="contact-bar">
+      <a href="mailto:sunh803@naver.com" class="primary">sunh803@naver.com</a>
+      <a href="https://github.com/sunhofficial" target="_blank">GitHub</a>
+      <a href="https://codeisfuture.tistory.com" target="_blank">Blog</a>
+      <a href="tel:010-2704-9055" class="mono">010-2704-9055</a>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== ABOUT ==================== -->
+<section id="about">
+  <h2 class="section-title">소개</h2>
+  <div class="about-table fade-in">
+    <div class="about-row">
+      <div class="about-label">경력</div>
+      <div class="about-content">
+        <div class="about-item">
+          <span class="about-item-name">에스디바이오센서 &mdash; iOS 개발자</span>
+          <span class="about-item-date">2025.11 ~ 현재</span>
+        </div>
+      </div>
+    </div>
+    <div class="about-row">
+      <div class="about-label">학력</div>
+      <div class="about-content">
+        <div class="about-item">
+          <span class="about-item-name">경희대학교 컴퓨터공학과</span>
+          <span class="about-item-date">2018.03 ~ 2025.02</span>
+        </div>
+      </div>
+    </div>
+    <div class="about-row">
+      <div class="about-label">교육 및 활동</div>
+      <div class="about-content">
+        <div class="about-item">
+          <span class="about-item-name">네이버 부스트캠프 iOS 파트</span>
+          <span class="about-item-date">2025.06 ~ 2025.11</span>
+        </div>
+        <div class="about-item">
+          <span class="about-item-name">애플 디벨로퍼 아카데미 @ POSTECH 2기</span>
+          <span class="about-item-date">2023.03 ~ 2023.12</span>
+        </div>
+      </div>
+    </div>
+    <div class="about-row">
+      <div class="about-label">자격증</div>
+      <div class="about-content">
+        <div class="about-item">
+          <span class="about-item-name">정보처리기사</span>
+          <span class="about-item-date">2025.09</span>
+        </div>
+        <div class="about-item">
+          <span class="about-item-name">ADsP (데이터분석 준전문가)</span>
+          <span class="about-item-date">2025.09</span>
+        </div>
+      </div>
+    </div>
+    <div class="about-row">
+      <div class="about-label">외국어</div>
+      <div class="about-content">
+        <div class="about-item">
+          <span class="about-item-name">OPIc 영어 IH</span>
+          <span class="about-item-date">2025.01</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CGMS ==================== -->
+<section id="cgms">
+  <div class="section-label">Project 01</div>
+  <h2 class="section-title">CGMS &mdash; 연속 혈당 모니터링 앱</h2>
+  <p class="section-desc">BLE 센서에서 실시간 혈당 데이터를 수신·저장·시각화하는 의료기기 iOS 앱. 다국가 배포 대응(다국어·타임존).</p>
+
+  <div class="project-card fade-in">
+    <div class="project-meta">
+      iOS 개발자 &middot; iOS 2, AOS 1 &middot; 2025.11 ~ 현재 &middot; 다국가 배포 대응 (다국어·타임존)
+    </div>
+
+    <ul class="bullet-list">
+      <li><strong>사내 BLE 프로토콜 직접 구현</strong> — 규격서 분석부터 센서 인증 시퀀스, 바이트 파서 전체를 설계·구현. 규격서와 실제 동작의 불일치(소수부 스케일링 등)를 검증·교정.</li>
+      <li><strong>백필링 큐 설계</strong> — 센서 재연결 시 누락 데이터를 5분→1분→1초 우선순위로 자동 복구하는 체이닝 구조 설계.</li>
+      <li><strong>SwiftUI 생명주기 버그 해결</strong> — <code>.task</code>가 뷰 형성에 의존해 Cold Start 시 BLE 연결이 누락되던 문제를, 초기화를 앱 생명주기(<code>didFinishLaunching</code>) 시점으로 옮겨 해결. iOS Pre-warming 동작도 로그 역추적으로 규명.</li>
+      <li><strong>로컬 알림 시스템 설계</strong> — 즉시·예약·반복 알림 일관성 보장. Bootstrap 재정합, Soft Delete로 재알림 판정 유지, 다국어 지연 평가.</li>
+      <li><strong>혈당 타임라인 차트 재설계</strong> — 슬롯 인덱스 방식에서 Date 기반 Viewport로 전환. Lazy Fetch + @State shadow로 60fps 유지.</li>
+      <li><strong>Feature 마이크로 모듈화</strong> — Feature를 Sources·Testing·DemoApp·Tests 4타겟으로 쪼개고, Domain 프로토콜 뒤의 주입만 바꿔 센서 없이 단독 실행·검증.</li>
+    </ul>
+
+    <div class="tech-tags">
+      <span class="tech-tag">Swift 6.0</span>
+      <span class="tech-tag">SwiftUI</span>
+      <span class="tech-tag">TCA</span>
+      <span class="tech-tag">Tuist</span>
+      <span class="tech-tag">CoreBluetooth</span>
+      <span class="tech-tag">SwiftData</span>
+      <span class="tech-tag">Protobuf</span>
+    </div>
+  </div>
+</section>
+
+<div class="ts-controls">
+  <button type="button" id="ts-toggle-all" onclick="toggleAllTs()">모두 접기</button>
+</div>
+
+<!-- ==================== TS 01 ==================== -->
+<details class="ts-card fade-in" open>
+  <summary>
+  <div class="ts-number">Troubleshooting 01 &mdash; CGMS</div>
+  <h3>BLE 백필링 큐 설계 — 재연결 시 누락 데이터를 자동 복구하는 체이닝 구조</h3>
+  <div class="ts-impact">재연결 몇 번이든 요청은 1회 &middot; 끊긴 체인은 다음 실시간 데이터가 자동 복구</div>
+  </summary>
+  <div class="ts-body">
+
+  <div class="ts-tag ts-tag-problem">문제</div>
+  <ul class="bullet-list">
+    <li>센서 재연결 시 놓친 구간을 다시 요청하는 백필링이, 재연결마다 중복 실행됐다. 어떤 요청이 나갔는지 기록도 없었다.</li>
+  </ul>
+
+  <div class="ts-tag ts-tag-solution">해결</div>
+  <ul class="bullet-list">
+    <li>누락 구간을 5분→1분→1초 순으로 큐에 적재. 1초 단위는 왕복 지연이 커서 누락 폭이 작을 때만 요청.</li>
+    <li><code>invokeNext()</code>가 큐에서 하나 꺼내 처리하고 자신을 다시 부른다. 상태 enum 없이 큐가 비면 끝, 남으면 진행 중.</li>
+    <li>응답이 끊기면 다음 실시간 insert가 <code>trigger()</code>로 멈춘 체인을 되살린다.</li>
+  </ul>
+
+  <div class="flow-diagram">
+    <svg viewBox="0 0 720 400" xmlns="http://www.w3.org/2000/svg" font-family="Pretendard Variable, Pretendard, sans-serif">
+      <defs>
+        <marker id="fd-ar" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto">
+          <path class="fd-arrow" d="M0,0 L6.5,3 L0,6 Z"/>
+        </marker>
+        <marker id="fd-ar-loop" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto">
+          <path class="fd-arrow-loop" d="M0,0 L6.5,3 L0,6 Z"/>
+        </marker>
+      </defs>
+
+      <!-- ===== 왼쪽 메인 컬럼 (x 90~330, 중앙선 210) ===== -->
+
+      <!-- 1. 센서 연결 -->
+      <rect class="fd-box" x="90" y="24" width="240" height="46" rx="9"/>
+      <text class="fd-code" x="210" y="44" text-anchor="middle" font-size="13">startInitialBackfill</text>
+      <text class="fd-sub" x="210" y="60" text-anchor="middle" font-size="11">센서 연결 직후 진입</text>
+
+      <!-- 2. buildQueue -->
+      <rect class="fd-box" x="90" y="116" width="240" height="62" rx="9"/>
+      <text class="fd-code" x="210" y="137" text-anchor="middle" font-size="13">buildQueueWith()</text>
+      <text class="fd-title" x="210" y="154" text-anchor="middle" font-size="11.5">5분 → 1분 → 1초 순 누락 적재</text>
+      <text class="fd-sub" x="210" y="169" text-anchor="middle" font-size="10.5">uniqueKey로 중복 차단 · 세밀 단위는 배치 상한 적용</text>
+
+      <!-- 3. invokeNext (decision) -->
+      <rect class="fd-box-accent" x="110" y="224" width="200" height="54" rx="9"/>
+      <text class="fd-code" x="210" y="246" text-anchor="middle" font-size="13">invokeNext()</text>
+      <text class="fd-title" x="210" y="263" text-anchor="middle" font-size="11.5">queue.first 있나?</text>
+
+      <!-- 4. process -->
+      <rect class="fd-box" x="90" y="324" width="240" height="56" rx="9"/>
+      <text class="fd-code" x="210" y="344" text-anchor="middle" font-size="13">process() → insertBackfill</text>
+      <text class="fd-sub" x="210" y="361" text-anchor="middle" font-size="10.5">제어 커맨드(5분/1분/1초 요청) write → DB 저장</text>
+
+      <!-- ===== 오른쪽 컬럼 (x 470~700, 중앙선 585) ===== -->
+
+      <!-- 5. 완료 (오른쪽 상단) -->
+      <rect class="fd-box" x="470" y="116" width="230" height="54" rx="9"/>
+      <text class="fd-title" x="585" y="139" text-anchor="middle" font-size="12.5">백필링 완료</text>
+      <text class="fd-sub" x="585" y="156" text-anchor="middle" font-size="10.5">큐 비면 자동 종료</text>
+
+      <!-- 6. trigger (오른쪽 하단) -->
+      <rect class="fd-box" x="470" y="324" width="230" height="56" rx="9"/>
+      <text class="fd-code" x="585" y="344" text-anchor="middle" font-size="12.5">trigger() — 실시간 insert</text>
+      <text class="fd-sub" x="585" y="361" text-anchor="middle" font-size="10.5">큐 비면 rebuildQueue / 남으면 nudge</text>
+
+      <!-- ===== 메인 흐름 1→2→3 (세로 직선, x=210) ===== -->
+      <path class="fd-line" d="M210,70 L210,114" marker-end="url(#fd-ar)"/>
+      <path class="fd-line" d="M210,178 L210,222" marker-end="url(#fd-ar)"/>
+
+      <!-- 3→4 있음 (세로 직선, x=210) -->
+      <path class="fd-line-loop" d="M210,278 L210,322" marker-end="url(#fd-ar-loop)"/>
+      <text class="fd-loop-label" x="222" y="304" font-size="11">있음 · dequeue</text>
+
+      <!-- self-driving: 4 process → 3 invokeNext (왼쪽 바깥 corridor x=60) -->
+      <path class="fd-line-loop" d="M90,352 L60,352 L60,251 L108,251" marker-end="url(#fd-ar-loop)"/>
+      <text class="fd-loop-label" x="52" y="304" font-size="10.5" text-anchor="middle" transform="rotate(-90 52 304)">self-driving</text>
+
+      <!-- 3→5 비어있음 (invokeNext 상단 오른쪽에서 나가 위로, corridor x=400) -->
+      <path class="fd-line" d="M310,238 L400,238 L400,143 L468,143" marker-end="url(#fd-ar)"/>
+      <text class="fd-edge-label" x="400" y="230" text-anchor="middle" font-size="11">비어있음</text>
+
+      <!-- trigger 6 → invokeNext 3 (멈춘 체인 복구: invokeNext 하단 오른쪽으로 복귀, corridor x=370) -->
+      <path class="fd-line-loop" d="M470,352 L370,352 L370,266 L312,266" marker-end="url(#fd-ar-loop)"/>
+      <text class="fd-loop-label" x="420" y="344" text-anchor="middle" font-size="10.5">멈춘 체인 복구</text>
+    </svg>
+  </div>
+  <p class="flow-diagram-caption">
+    명시적 상태 enum 없이 <strong style="color:var(--text-secondary)">큐의 존재/부재</strong>만으로 진행을 판단하는 self-driving 체인.
+  </p>
+
+  <div class="ts-tag ts-tag-result">결과</div>
+  <ul class="bullet-list">
+    <li>재연결 몇 번이든 요청은 1회. 중복은 <code>uniqueKey</code>로 큐 진입 시점에 차단.</li>
+    <li>응답이 유실돼도 다음 실시간 데이터가 도착하는 순간 체인이 스스로 복구.</li>
+  </ul>
+</div>
+</details>
+
+<!-- ==================== TS 02 ==================== -->
+<details class="ts-card fade-in" open>
+  <summary>
+  <div class="ts-number">Troubleshooting 02 &mdash; CGMS</div>
+  <h3>앱 생명주기 추적 — Cold Start 시 BLE 초기화가 누락되던 <code>.task</code> 타이밍 버그 해결</h3>
+  <div class="ts-impact">Cold Start BLE 연결 누락 해결 &middot; Launch 5종 판정 &middot; Apple DTS 직접 협의로 규명</div>
+  </summary>
+  <div class="ts-body">
+
+  <div class="ts-tag ts-tag-problem">문제</div>
+  <ul class="bullet-list">
+    <li>앱 최초 실행 시 CoreBluetooth 초기화를 SwiftUI <code>View.task</code>에 걸어뒀는데, <code>.task</code>는 뷰가 떠야 실행된다. 뷰 없이 프로세스만 깨어나는 경로(BLE State Restoration 등)에선 호출되지 않아 BLE 연결이 간헐적으로 누락됐다.</li>
+    <li>Jetsam 종료는 <code>applicationWillTerminate</code>가 안 불려 로그조차 없었다.</li>
+  </ul>
+
+  <div class="ts-tag ts-tag-solution">해결</div>
+  <ul class="bullet-list">
+    <li>BLE 초기화를 <code>View.task</code> → <code>AppDelegate.didFinishLaunching</code>으로 이전. 뷰 타이밍과 무관하게 launch마다 1회 보장. State Restoration은 더 이른 <code>willFinishLaunching</code>에서 선제 처리.</li>
+    <li><code>ActivePrewarm</code>·<code>applicationState</code>·<code>launchOptions</code> 조합으로 Launch 유형 5종(Cold / Background Cold / Background / Pre-warm / Warm Resume) 판정.</li>
+    <li>Apple DTS 엔지니어와 직접 협의(Forums Thread 763739·765674)해 "진짜 Pre-warm은 <code>didFinishLaunching</code>까지 오지 않는다"를 확정 — Pre-warm 오판을 바로잡음.</li>
+    <li><code>cleanExitFlag</code>로 정상 종료 vs Jetsam 구분, launch마다 dead duration·발열 원격 수집.</li>
+  </ul>
+
+  <div class="ts-tag ts-tag-result">결과</div>
+  <ul class="bullet-list">
+    <li>모든 launch 경로에서 BLE 초기화 1회 보장. 재발 시 어느 경로에서 끊겼는지 로그로 추적 가능.</li>
+  </ul>
+</div>
+</details>
+
+<!-- ==================== TS 03 ==================== -->
+<details class="ts-card fade-in" open>
+  <summary>
+  <div class="ts-number">Troubleshooting 03 &mdash; CGMS</div>
+  <h3>로컬 알림 시스템 설계 — 재부팅·삭제·언어 변경에도 깨지지 않는 일관성</h3>
+  <div class="ts-impact">재부팅·타임존·언어 변경에도 알림 일관성 유지 &middot; 삭제 후에도 재알림 판정 정상</div>
+  </summary>
+  <div class="ts-body">
+
+  <div class="ts-tag ts-tag-problem">문제</div>
+  <ul class="bullet-list">
+    <li>재부팅·앱 재시작 시 OS 알림 상태와 DB가 어긋났다. 알림함에서 항목을 지우면 재알림 간격 판정용 레코드까지 사라졌고, 언어를 바꾸면 예약 알림이 이전 언어로 떴다.</li>
+  </ul>
+
+  <div class="ts-tag ts-tag-solution">해결</div>
+  <ul class="bullet-list">
+    <li>앱 시작 시 OS 알림과 DB를 대조해 불일치 자동 복구. 빌드·타임존 변경 감지 시 전체 재등록.</li>
+    <li>삭제는 Soft Delete — 판정용 레코드는 DB에 남긴다. 레코드가 누적되는 비용은 의료기기 특성상 판정 정확도를 우선해 감수.</li>
+    <li>알림 문자열은 등록 시점이 아닌 표시 시점에 평가(<code>localizedUserNotificationString</code>) — 언어를 바꿔도 현재 언어로 표시.</li>
+  </ul>
+
+  <div class="ts-tag ts-tag-result">결과</div>
+  <ul class="bullet-list">
+    <li>재부팅·재시작·타임존·언어 변경 어떤 상황에서도 알림과 DB가 어긋나지 않는다.</li>
+  </ul>
+</div>
+</details>
+
+<!-- ==================== TS 04 ==================== -->
+<details class="ts-card fade-in" open>
+  <summary>
+  <div class="ts-number">Troubleshooting 04 &mdash; CGMS</div>
+  <h3>혈당 타임라인 차트 재설계 — 슬롯 인덱스에서 Date 기반 Viewport로</h3>
+  <div class="ts-impact">프레임 드랍 828회→1회 &middot; SwiftUI 소요 33.7s→2.8s &middot; 60fps 스크롤</div>
+  </summary>
+  <div class="ts-body">
+
+  <div class="ts-tag ts-tag-problem">문제</div>
+  <ul class="bullet-list">
+    <li>90일 링버퍼 25,920 슬롯을 통째로 메모리에 올리고, 데이터 1개 도착·스크롤 1칸마다 전체를 풀스캔했다. 90일치를 채우자 스크롤이 버벅였다.</li>
+  </ul>
+
+  <div class="ts-tag ts-tag-solution">해결</div>
+  <ul class="bullet-list">
+    <li>Viewport를 슬롯 인덱스에서 Date 범위로 바꾸고 보이는 구간만 lazy fetch. pan 중엔 TCA를 우회하는 <code>@State</code> shadow로 60fps 유지. 식사·운동 이벤트도 같은 Date 좌표계에 얹어 클러스터링 마커로 표시.</li>
+  </ul>
+
+  <div class="ba-compare">
+    <div class="ba-col ba-col-before">
+      <div class="ba-head">Before</div>
+      <ul class="ba-list">
+        <li>25,920 슬롯 상시 메모리 점유</li>
+        <li>이벤트마다 슬롯 전체 풀스캔</li>
+        <li>pan 매 프레임 → TCA Reducer 호출</li>
+        <li>이벤트는 슬롯 인덱스로 별도 매핑 필요</li>
+      </ul>
+    </div>
+    <div class="ba-col ba-col-after">
+      <div class="ba-head">After</div>
+      <ul class="ba-list">
+        <li>보이는 구간(×3)만 fetch, ×4 밖은 drop</li>
+        <li><code>endDate = now</code> 고정 → 오른쪽 끝 항상 현재</li>
+        <li>pan 중 <code>@State</code> shadow → 종료 시만 sync</li>
+        <li>이벤트도 동일 Date 좌표계 → 시간 윈도우 클러스터링</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ts-tag ts-tag-result">결과 &mdash; Instruments, 90일치 부하</div>
+  <div class="metrics-row" style="margin-top: 12px;">
+    <div class="metric-card">
+      <div class="metric-value">&minus;99.9%</div>
+      <div class="metric-label">프레임 드랍<br>828회 → 1회</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">&minus;92%</div>
+      <div class="metric-label">SwiftUI 총 소요<br>33.7s → 2.8s</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">&minus;26%</div>
+      <div class="metric-label">메모리 상주<br>77 → 57 MiB</div>
+    </div>
+  </div>
+
+</div>
+</details>
+
+<!-- ==================== TS 06 (모듈화 아키텍처) ==================== -->
+<details class="ts-card fade-in" open>
+  <summary>
+  <div class="ts-number">Architecture &mdash; CGMS</div>
+  <h3>모듈화 아키텍처 설계 — DIP로 의존을 끊어 센서 없이 검증 가능한 구조로</h3>
+  <div class="ts-impact">Feature = 4타겟 마이크로 모듈 &middot; 주입만 바꿔 센서 없이 단독 실행 &middot; 5개 레이어 52개 모듈</div>
+  </summary>
+  <div class="ts-body">
+
+  <div class="ts-tag ts-tag-problem">문제</div>
+  <ul class="bullet-list">
+    <li>단일 타겟이라 화면 하나 고쳐도 전체 재빌드. BLE 센서를 실제로 부착·웜업하지 않으면 차트 UI를 개발·검증할 수 없었고, 저혈당·고혈당 같은 경계 시나리오는 실제 혈당으로 재현이 불가능했다.</li>
+  </ul>
+
+  <div class="ts-tag ts-tag-solution">해결 — Feature 마이크로 모듈화</div>
+  <ul class="bullet-list">
+    <li>Feature 하나를 <code>Sources·Testing·DemoApp·Tests</code> 4타겟 마이크로 모듈로 구성. 직접 만든 Tuist 템플릿이 이 구조를 강제해서, 누가 모듈을 추가해도 같은 모양이 나온다.</li>
+    <li>Sources(화면·로직)는 Domain의 Repository 프로토콜에만 의존한다(DIP). BLE·SwiftData 실구현은 Data 모듈이, Mock·샘플 데이터는 Testing 타겟이 소유.</li>
+    <li>그래서 <strong>같은 화면 코드가 주입만 바꿔 두 곳에서 돈다</strong> — 본 App은 실구현을 꽂아 실센서로, DemoApp은 Testing의 Mock을 꽂아 센서 없이 시뮬레이터에서 단독 실행.</li>
+    <li>DemoApp의 Hypo/Hyper 슬라이더로 저혈당·고혈당 경계 시나리오를 즉시 재현. 전체 구조는 5개 레이어 52개 모듈.</li>
+  </ul>
+
+  <div class="flow-diagram">
+    <svg viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg" font-family="Pretendard Variable, Pretendard, sans-serif">
+      <defs>
+        <marker id="md-ar" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto">
+          <path class="fd-arrow" d="M0,0 L6.5,3 L0,6 Z"/>
+        </marker>
+        <marker id="md-ar-dip" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto">
+          <path class="fd-arrow-loop" d="M0,0 L6.5,3 L0,6 Z"/>
+        </marker>
+      </defs>
+
+      <!-- Feature 모듈 컨테이너 -->
+      <rect class="fd-box" x="40" y="16" width="640" height="224" rx="12"/>
+      <text class="fd-title" x="360" y="44" text-anchor="middle" font-size="12.5">Feature 모듈 하나 — Tuist 템플릿이 강제하는 표준 4타겟</text>
+
+      <!-- Sources -->
+      <rect class="fd-box-accent" x="70" y="62" width="280" height="68" rx="9"/>
+      <text class="fd-code" x="210" y="86" text-anchor="middle" font-size="13">Sources</text>
+      <text class="fd-title" x="210" y="103" text-anchor="middle" font-size="11.5">화면·로직 (TCA)</text>
+      <text class="fd-sub" x="210" y="118" text-anchor="middle" font-size="10.5">Domain 프로토콜에만 의존</text>
+
+      <!-- Tests -->
+      <rect class="fd-box" x="380" y="62" width="270" height="68" rx="9"/>
+      <text class="fd-code" x="515" y="86" text-anchor="middle" font-size="13">Tests</text>
+      <text class="fd-sub" x="515" y="106" text-anchor="middle" font-size="10.5">TestStore 유닛 테스트</text>
+
+      <!-- Testing -->
+      <rect class="fd-box" x="70" y="152" width="280" height="68" rx="9"/>
+      <text class="fd-code" x="210" y="176" text-anchor="middle" font-size="13">Testing</text>
+      <text class="fd-sub" x="210" y="196" text-anchor="middle" font-size="10.5">Mock Repository · 화면 시나리오 샘플 데이터</text>
+
+      <!-- DemoApp -->
+      <rect class="fd-box" x="380" y="152" width="270" height="68" rx="9"/>
+      <text class="fd-code" x="515" y="176" text-anchor="middle" font-size="13">DemoApp</text>
+      <text class="fd-sub" x="515" y="196" text-anchor="middle" font-size="10.5">Sources + Testing 조립 → 단독 실행</text>
+
+      <!-- Domain 인터페이스 -->
+      <rect class="fd-box-accent" x="190" y="300" width="340" height="56" rx="9"/>
+      <text class="fd-code" x="360" y="323" text-anchor="middle" font-size="13">Domain — Repository 프로토콜</text>
+      <text class="fd-sub" x="360" y="340" text-anchor="middle" font-size="10.5">화면과 구현 사이의 경계</text>
+
+      <!-- 컨테이너 → Domain -->
+      <path class="fd-line" d="M360,240 L360,298" marker-end="url(#md-ar)"/>
+      <text class="fd-edge-label" x="372" y="274" font-size="10.5">인터페이스에만 의존</text>
+
+      <!-- 실구현 -->
+      <rect class="fd-box" x="60" y="416" width="280" height="64" rx="9"/>
+      <text class="fd-code" x="200" y="440" text-anchor="middle" font-size="12.5">Data 모듈 — 실구현</text>
+      <text class="fd-sub" x="200" y="458" text-anchor="middle" font-size="10.5">BLE·SwiftData — 본 App이 주입</text>
+
+      <!-- Mock -->
+      <rect class="fd-box" x="380" y="416" width="280" height="64" rx="9"/>
+      <text class="fd-code" x="520" y="440" text-anchor="middle" font-size="12.5">Testing의 Mock — 더미 데이터</text>
+      <text class="fd-sub" x="520" y="458" text-anchor="middle" font-size="10.5">DemoApp이 주입 — 센서 없이 동작</text>
+
+      <!-- 구현 → Domain (위로 향하는 DIP 화살표) -->
+      <path class="fd-line-loop" d="M200,414 L200,358" marker-end="url(#md-ar-dip)"/>
+      <text class="fd-loop-label" x="188" y="390" text-anchor="end" font-size="10.5">실구현 주입 (DIP)</text>
+      <path class="fd-line-loop" d="M520,414 L520,358" marker-end="url(#md-ar-dip)"/>
+      <text class="fd-loop-label" x="532" y="390" font-size="10.5">Mock 주입</text>
+    </svg>
+  </div>
+  <p class="flow-diagram-caption">
+    화면 코드(Sources)는 하나 — Domain 프로토콜 뒤의 구현만 바꿔 끼우면 <strong style="color:var(--text-secondary)">본 App은 실센서로, DemoApp은 더미로</strong> 같은 화면이 돈다.
+  </p>
+
+  <div class="chart-figure">
+    <div class="phone-frame chart-frame chart-frame-tall"><img src="cgms-demoapp.png" alt="DemoApp — Hypo/Hyper 슬라이더로 경계값을 바꾸면 세 차트의 색 구간이 실시간 반영"></div>
+    <p class="chart-caption">
+      DemoApp의 Hypo/Hyper 슬라이더. 센서 없이 경계값을 조작해 세 차트의 색 구간 전 시나리오를 검증한다.
+    </p>
+  </div>
+
+  <div class="ts-tag ts-tag-solution">설계 판단</div>
+  <ul class="bullet-list">
+    <li>TCA UI Feature는 Interface로 분리하지 않았다 — Parent가 Child State를 직접 소유해야 <code>Scope</code>가 동작하기 때문. 추상화는 Domain/Infra 레이어에만.</li>
+    <li><code>liveValue</code>는 구현을 소유한 Data 모듈에, Interface에는 <code>testValue</code>만 — 구현 변경이 상위 레이어로 전파되지 않게.</li>
+    <li>샘플 데이터는 Domain/Testing(모델 헬퍼)과 Feature/Testing(화면 시나리오)으로 분리 — Domain이 화면 사정을 모르게.</li>
+  </ul>
+
+  <div class="ts-tag ts-tag-result">결과</div>
+  <ul class="bullet-list">
+    <li>센서 부착·웜업 없이 차트 전 시나리오를 검증할 수 있게 됐다.</li>
+  </ul>
+</div>
+</details>
+
+<!-- ==================== BOLETTO ==================== -->
+<section id="boletto" style="padding-top: 40px;">
+  <div class="section-label">Project 02</div>
+  <h2 class="section-title">볼레또 &mdash; 위치 기반 여행 기록 앱</h2>
+  <p class="section-desc">특정 장소 방문 시 뱃지를 획득하고, 티켓 형태로 여행을 꾸며 공유하는 앱.</p>
+
+  <div class="project-card fade-in">
+    <img src="boletto-logo.png" alt="볼레또 로고" class="project-logo">
+    <div class="project-header">
+      <h3>Boletto</h3>
+      <span class="project-period">2024.08 ~ 2025.05</span>
+    </div>
+    <div class="project-meta">
+      PM &amp; iOS 개발자 (기여도 100%) &middot; 6인 팀 (iOS 1, BE 2, Designer 3) &middot; 9개월 &middot; App Store 출시
+    </div>
+
+    <div class="app-gallery">
+      <div class="phone-frame"><img src="boletto-home.png" alt="볼레또 홈 - 티켓 리스트"></div>
+      <div class="phone-frame"><img src="boletto-ticket-front.png" alt="볼레또 티켓 앞면"></div>
+      <div class="phone-frame"><img src="boletto-ticket-back.png" alt="볼레또 티켓 뒷면 - 스티커맵"></div>
+      <div class="phone-frame"><img src="boletto-location.png" alt="볼레또 위치 도착 뱃지"></div>
+      <div class="phone-frame"><img src="boletto-photobooth.png" alt="볼레또 네컷사진 꾸미기"></div>
+    </div>
+
+    <ul class="bullet-list">
+      <li><strong>Metal GPU 파이프라인</strong> — 사용자 58% 외부 앱 이탈 문제 발견 후 8종 실시간 필터 인앱 구현. CPU 84%↓, FPS 15→56, 크래시 0%.</li>
+      <li><strong>이미지 로딩 95% 단축</strong> — TaskGroup 배치 처리 + SwiftData 캐싱으로 2초 → 0.11초.</li>
+      <li><strong>CLMonitor + AsyncStream 위치 모니터링</strong> — 백그라운드 지오펜싱. AsyncStream 미종료 메모리 릭 발견 후 <code>activeContinuation</code>으로 수정.</li>
+      <li><strong>6인 팀 빌딩 및 리드</strong> — 디자이너 갈등 중재, 백엔드 교체 결단, 7개월 만에 App Store 출시 후 광고 운영.</li>
+    </ul>
+
+    <div class="tech-tags">
+      <span class="tech-tag">SwiftUI</span>
+      <span class="tech-tag">TCA</span>
+      <span class="tech-tag">Metal</span>
+      <span class="tech-tag">CoreLocation</span>
+      <span class="tech-tag">SwiftData</span>
+      <span class="tech-tag">Alamofire</span>
+      <span class="tech-tag">Fastlane</span>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TS Boletto 01 ==================== -->
+<details class="ts-card fade-in" open>
+  <summary>
+  <div class="ts-number">Troubleshooting 01 &mdash; Boletto</div>
+  <h3>Metal 필터 GPU 파이프라인 최적화 — 블로킹·재생성 제거</h3>
+  <div class="ts-impact">CPU 349%&rarr;55% (84%&darr;) &middot; FPS 15&rarr;56 &middot; 크래시 100%&rarr;0%</div>
+  </summary>
+  <div class="ts-body">
+
+  <div class="ts-tag ts-tag-problem">문제</div>
+  <ul class="bullet-list">
+    <li>사용자 58%가 사진 편집 때문에 외부 앱으로 이탈해 인앱 필터를 구현했는데, 슬라이더를 빠르게 조작하면 CPU 546%·FPS 15로 크래시가 났다.</li>
+    <li>원인은 <code>waitUntilCompleted()</code>가 GPU 완료까지 CPU를 블로킹하고, Texture·Pipeline을 매 조작마다 재생성하는 구조.</li>
+  </ul>
+
+  <div class="perf-table-wrapper">
+    <table class="perf-table">
+      <thead>
+        <tr><th>Metric</th><th>Before</th><th>After</th><th>Improvement</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>CPU Total Load</td><td class="val-before">546%</td><td class="val-after">220%</td><td class="val-improve">60%&darr;</td></tr>
+        <tr><td>Min FPS</td><td class="val-before">15</td><td class="val-after">56</td><td class="val-improve">273%&uarr;</td></tr>
+        <tr><td>GPU Usage</td><td class="val-before">99%</td><td class="val-after">60%</td><td class="val-improve">39%&darr;</td></tr>
+        <tr><td>CPU Usage</td><td class="val-before">349%</td><td class="val-after">55%</td><td class="val-improve">84%&darr;</td></tr>
+        <tr><td>Thumbnail Loading</td><td class="val-before">2s</td><td class="val-after">0.11s</td><td class="val-improve">95%&darr;</td></tr>
+        <tr><td>Filter Apply</td><td class="val-before">1.43s</td><td class="val-after">0.16s</td><td class="val-improve">91%&darr;</td></tr>
+        <tr><td>App Crash</td><td class="val-before">100%</td><td class="val-after">0%</td><td class="val-improve">Resolved</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ts-tag ts-tag-solution">해결</div>
+  <ul class="bullet-list">
+    <li>블로킹을 <code>addCompletedHandler</code> 비동기 처리로 바꾸고, Texture·Pipeline State는 캐싱해 재사용.</li>
+    <li>TaskGroup으로 3개씩 배치 처리해 GPU 부하 분산. 입력 텍스처는 <code>.private</code>(GPU 전용), 출력만 <code>.shared</code>로 메모리 액세스 최적화.</li>
+  </ul>
+
+  <div class="ts-tag ts-tag-result">결과</div>
+  <ul class="bullet-list">
+    <li>슬라이더를 빠르게 조작해도 크래시 없이 56fps 유지 — 외부 앱 이탈 없이 인앱에서 편집이 끝난다.</li>
+  </ul>
+</div>
+</details>
+
+<!-- ==================== Leadership 01 — Boletto ==================== -->
+<details class="ts-card fade-in" open>
+  <summary>
+  <div class="ts-number">Leadership 01 &mdash; Boletto</div>
+  <h3>6인 팀 빌딩부터 App Store 출시까지</h3>
+  <div class="ts-impact">7개월 내 출시 &middot; "가장 협업에 기여한 팀원"</div>
+  </summary>
+  <div class="ts-body">
+
+  <div class="ts-tag ts-tag-episode">에피소드 1 — 디자이너 갈등</div>
+  <ul class="bullet-list">
+    <li>UI디자이너가 울면서 팀을 나가겠다고 연락했다. 원인은 UX디자이너와의 소통 방식 차이. 각자 1:1로 면담한 뒤 업무 영역을 기획(UX)/시각(UI)으로 분리해 충돌 구조 자체를 없앴다.</li>
+  </ul>
+
+  <div class="ts-tag ts-tag-episode">에피소드 2 — 백엔드 지연</div>
+  <ul class="bullet-list">
+    <li>OAuth 로그인이 한 달째 미완성. 직접 물었다 — <em>"이 프로젝트가 지금 몇 순위예요? 솔직하게 말해줘야 우리가 맞출 수 있어요."</em> 마지막 순위라는 답을 듣고, 더 기다리지 않고 새 백엔드를 섭외해 인수인계했다.</li>
+  </ul>
+
+  <div class="ts-tag ts-tag-result">결과</div>
+  <div class="ts-text">
+    7개월 만에 App Store 출시, 이후 광고 운영까지 9개월간 프로젝트 리드.<br>
+    "가장 협업에 기여한 팀원" 평가 — 팀이 끝난 후에도 연락이 온다.
+  </div>
+</div>
+</details>
+
+<!-- ==================== AI WORKFLOW ==================== -->
+<section id="ai" style="padding-top: 40px;">
+  <div class="section-label">AI-Driven Development</div>
+  <h2 class="section-title">AI 에이전트를 팀 도구로 — 워크플로우 설계</h2>
+  <p class="section-desc">AI를 쓰는 것과 AI의 한계를 알고 시스템으로 설계하는 것은 다르다.</p>
+
+  <details class="ts-card fade-in" open>
+  <summary>
+    <div class="ts-number">AI Workflow &mdash; CGMS</div>
+    <h3>멀티에이전트 역할 분배 + Plan-first 워크플로우</h3>
+    <div class="ts-impact">Claude / Gemini / Codex 역할 분리 &middot; 파일 충돌 방지 &middot; AI 반복 실수 차단 시스템</div>
+  </summary>
+  <div class="ts-body">
+
+    <div class="ts-tag ts-tag-problem">문제</div>
+    <ul class="bullet-list">
+      <li>AI에게 바로 구현을 시키면 사이드이펙트를 놓쳐 같은 실수를 반복하거나 이전 작업을 되돌렸다. 단일 에이전트로 분석·파싱·구현을 다 시키면 컨텍스트가 오염되고 토큰 비용이 커졌다.</li>
+    </ul>
+
+    <div class="ts-tag ts-tag-solution">설계</div>
+    <ul class="bullet-list">
+      <li>Plan-first — 구현 전 계획 제시·승인을 강제. 멀티스텝 작업은 단계마다 검증 방법을 붙여 계획한 뒤 실행.</li>
+      <li>역할 분배 — Claude는 계획·판단, Gemini는 규격서 파싱·대용량 분석(1M 컨텍스트), Codex는 구현·반복 작업. 병렬 실행의 파일 충돌은 <code>AGENTS.md</code>의 파일 lock 규칙으로 해결.</li>
+      <li>반복 실수는 <code>known-gotchas.md</code>에 기록해 다음 세션에서 자동 차단.</li>
+    </ul>
+
+    <div class="ts-tag ts-tag-result">결과</div>
+    <ul class="bullet-list">
+      <li>AI가 모듈 의존 방향·네이밍 규칙·금지 패턴을 처음부터 준수. revert 반복 없이 계획 → 승인 → 구현 흐름 유지, 병렬 실행 파일 충돌 0건.</li>
+    </ul>
+  </div>
+</details>
+</section>
+</div><!-- /container -->
+
+<footer>
+  <p>&copy; 2026 이선호 &mdash; 시스템 경계면의 문제를 끝까지 추적합니다.</p>
+</footer>
+
+<script>
+  function toggleTheme() {
+    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    localStorage.setItem('theme', next);
+    document.getElementById('theme-toggle').textContent = next === 'dark' ? '☀' : '☽';
+  }
+  document.getElementById('theme-toggle').textContent =
+    document.documentElement.dataset.theme === 'dark' ? '☀' : '☽';
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // 트러블슈팅 아코디언: 모두 펼치기/접기
+  const tsCards = () => document.querySelectorAll('details.ts-card');
+  function toggleAllTs() {
+    const btn = document.getElementById('ts-toggle-all');
+    const expand = btn.textContent === '모두 펼치기';
+    tsCards().forEach(d => d.open = expand);
+    btn.textContent = expand ? '모두 접기' : '모두 펼치기';
+  }
+
+  // 인쇄/PDF 변환 시 자동 전체 펼침, 끝나면 원상복구
+  window.addEventListener('beforeprint', () => {
+    tsCards().forEach(d => { d.dataset.wasOpen = d.open ? '1' : '0'; d.open = true; });
+  });
+  window.addEventListener('afterprint', () => {
+    tsCards().forEach(d => { d.open = d.dataset.wasOpen === '1'; });
+  });
+</script>
+
+</body>
+</html>
